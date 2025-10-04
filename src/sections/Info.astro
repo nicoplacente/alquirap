@@ -1,0 +1,62 @@
+---
+import SectionContainer from "../components/SectionContainer.astro";
+import Title from "../components/Title.astro";
+import GlassCard from "../components/GlassCard.astro";
+import Dot from "../components/icons/Dot.astro";
+import SubTitle from "../components/SubTitle.astro";
+import Check from "../components/icons/Check.astro";
+
+const rentalSteps = [
+  { id: 1, text: "Alquiler por día" },
+  { id: 2, text: "Alquiler por semana" },
+  { id: 3, text: "Alquiler por mes" },
+  { id: 4, text: "Por contrato" },
+  { id: 5, text: "Maquinaria especializada disponible bajo reserva" },
+];
+---
+
+<SectionContainer id="info">
+  <div class="relative">
+    <Title>Información</Title>
+
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <GlassCard>
+        <SubTitle>
+          <Dot />
+          Sobre el dueño
+        </SubTitle>
+        <p class="mt-4 text-gray-200 leading-relaxed">
+          <b>Alfredo J. Scialabba</b> fundó
+          <strong
+            class="px-1 mr-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded"
+          >
+            AlquiRap
+          </strong>
+          con la misión de brindar acceso fácil y rápido a herramientas y maquinaria
+          para profesionales y particulares. Con más de
+          <span class="font-semibold text-blue-300">10 años de experiencia</span
+          >
+          en el rubro, se dedica a garantizar un servicio transparente y confiable.
+        </p>
+      </GlassCard>
+
+      <GlassCard>
+        <SubTitle>
+          <Dot />
+          Cómo funciona el alquiler
+        </SubTitle>
+        <ul
+          class="mt-4 space-y-3 grid grid-cols-1 lg:grid-cols-2 text-gray-200"
+        >
+          {
+            rentalSteps.map((step) => (
+              <li class="flex items-start gap-3">
+                <Check /> {step.text}
+              </li>
+            ))
+          }
+        </ul>
+      </GlassCard>
+    </div>
+  </div>
+</SectionContainer>

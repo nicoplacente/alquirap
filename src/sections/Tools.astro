@@ -1,0 +1,30 @@
+---
+import SectionContainer from "../components/SectionContainer.astro";
+import Title from "../components/Title.astro";
+import { tools } from "../libs/tools-constants.js";
+---
+
+<section id="tools" class="bg-blue-100 py-16">
+  <Title> Nuestras Herramientas </Title>
+  <div class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
+    {
+      tools.map((tool) => (
+        <div class="bg-white flex flex-col justify-between p-4 rounded-xl shadow hover:shadow-lg transition group overflow-hidden">
+          <img
+            src={tool.image}
+            alt={tool.name}
+            class="rounded-lg w-full h-48 object-scale-down group-hover:scale-110 transition-transform duration-300"
+            title={tool.name}
+          />
+          <h3 class="mt-4 text-xl font-semibold text-blue-800 text-balance">
+            {tool.name}
+          </h3>
+          <p class="text-gray-600 text-pretty">{tool.description}</p>
+          <p class="mt-2 font-bold text-blue-900">
+            ${tool.price.toLocaleString("es-AR")} / día
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,88 @@
+---
+import SectionContainer from "../components/SectionContainer.astro";
+import Review from "../components/Review.astro";
+import Title from "../components/Title.astro";
+import { REVIEWS } from "../libs/reviews-constants.js";
+---
+
+<SectionContainer id="reviews">
+  <Title>Reseñas</Title>
+
+  <div class="relative overflow-hidden">
+    <div id="slider-track" class="flex gap-6" style="will-change: transform;">
+      {REVIEWS.map((review) => <Review {...review} />)}
+      {REVIEWS.map((review) => <Review {...review} />)}
+    </div>
+  </div>
+</SectionContainer>
+
+<script is:inline>
+  const track = document.getElementById("slider-track");
+  const slides = Array.from(track.children);
+  const total = slides.length / 2;
+  let slideWidth = slides[0].offsetWidth + 24;
+  let contentWidth = slideWidth * total;
+  let pos = 0;
+  let dragging = false;
+  let startX = 0;
+  let lastX = 0;
+  let speed = 0;
+  let requestId;
+
+  function animate() {
+    if (!dragging) {
+      pos -= 1;
+    } else {
+      pos += speed;
+    }
+
+    if (pos <= -contentWidth) pos += contentWidth;
+    if (pos > 0) pos -= contentWidth;
+
+    track.style.transform = `translateX(${pos}px)`;
+    requestId = requestAnimationFrame(animate);
+  }
+
+  requestId = requestAnimationFrame(animate);
+
+  function onStart(e) {
+    dragging = true;
+    cancelAnimationFrame(requestId);
+    startX = e.type.includes("mouse") ? e.pageX : e.touches[0].pageX;
+    lastX = startX;
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("touchmove", onMove);
+    window.addEventListener("mouseup", onEnd);
+    window.addEventListener("touchend", onEnd);
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    const x = e.type.includes("mouse") ? e.pageX : e.touches[0].pageX;
+    speed = x - lastX;
+    pos += speed;
+    lastX = x;
+    track.style.transform = `translateX(${pos}px)`;
+  }
+
+  function onEnd(e) {
+    dragging = false;
+    speed = 0;
+
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("touchmove", onMove);
+    window.removeEventListener("mouseup", onEnd);
+    window.removeEventListener("touchend", onEnd);
+
+    requestId = requestAnimationFrame(animate);
+  }
+
+  track.addEventListener("mousedown", onStart);
+  track.addEventListener("touchstart", onStart);
+
+  window.addEventListener("resize", () => {
+    slideWidth = slides[0].offsetWidth + 24;
+    contentWidth = slideWidth * total;
+  });
+</script>

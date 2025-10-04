@@ -3,4 +3,19 @@
 html,
 body {
   color-scheme: dark;
+  font-family: "Montserrat", sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #1447e6 #020618;
+  scroll-behavior: smooth;
+}
+
+.mySwiper {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.mySwiper swiper-slide {
+  display: flex;
+  justify-content: center;
+  height: auto;
 }

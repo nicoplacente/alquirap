@@ -1,0 +1,53 @@
+---
+import SectionContainer from "../components/SectionContainer.astro";
+import Location from "../components/icons/Location.astro";
+import Phone from "../components/icons/Phone.astro";
+import Mail from "../components/icons/Mail.astro";
+
+const contactInfo = [
+  {
+    icon: Mail,
+    text: "alquirap@hotmail.com",
+    href: "mailto:alquirap@hotmail.com",
+    target: "_blank",
+  },
+  {
+    icon: Phone,
+    text: "292615496732",
+    href: "tel:292615496732",
+    target: "_self",
+  },
+  {
+    icon: Location,
+    text: "Av. Del Molino 1551 - Coronel Suárez",
+    href: "https://www.google.com/maps?ll=-37.461934,-61.938594&z=15&t=m&hl=es-419&gl=US&mapclient=embed&q=Av.+del+Molino+1551+B7540+Coronel+Suarez+Provincia+de+Buenos+Aires",
+    target: "_blank",
+  },
+];
+---
+
+<SectionContainer id="contact" className="bg-blue-900 py-16">
+  <h2 class="text-3xl font-bold text-center mb-10">Contacto y Ubicación</h2>
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 sm:px-6">
+    <div class="flex flex-col gap-2">
+      {
+        contactInfo.map((item) => (
+          <a
+            href={item.href}
+            aria-label={item.text}
+            target={item.target}
+            rel="noopener noreferrer nofollow"
+            class="flex items-center gap-2 hover:underline"
+          >
+            <item.icon />
+            {item.text}
+          </a>
+        ))
+      }
+    </div>
+    <iframe
+      class="w-full h-64 rounded-lg shadow-lg"
+      src="https://maps.google.com/maps?q=Av.%20Del%20Molino%201551%20Coronel%20Su%C3%A1rez&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    ></iframe>
+  </div>
+</SectionContainer>
