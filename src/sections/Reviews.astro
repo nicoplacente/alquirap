@@ -81,6 +81,7 @@ import { REVIEWS } from "../libs/reviews-constants.js";
   }
 
   function onEnd(e) {
+    e.preventDefault();
     if (!dragging) return;
     dragging = false;
     track.releasePointerCapture(e.pointerId);
