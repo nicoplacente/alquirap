@@ -45,13 +45,14 @@ const rentalSteps = [
           <Dot />
           Cómo funciona el alquiler
         </SubTitle>
-        <ul
-          class="mt-4 space-y-3 grid grid-cols-1 lg:grid-cols-2 text-gray-200"
-        >
+        <ul class="mt-4 space-y-3 flex flex-wrap text-gray-200">
           {
             rentalSteps.map((step) => (
-              <li class="flex items-start gap-3">
-                <Check /> {step.text}
+              <li class="flex min-w-[225px] max-w-full items-start gap-3">
+                <span>
+                  <Check class="text-blue-400" />
+                </span>{" "}
+                {step.text}
               </li>
             ))
           }
