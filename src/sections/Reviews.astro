@@ -22,19 +22,18 @@ import { REVIEWS } from "../libs/reviews-constants.js";
   const total = slides.length / 2;
   let slideWidth = slides[0].offsetWidth + 24;
   let contentWidth = slideWidth * total;
+
   let pos = 0;
   let dragging = false;
+  let moved = false;
   let startX = 0;
   let lastX = 0;
   let speed = 0;
   let requestId;
 
   function animate() {
-    if (!dragging) {
-      pos -= 1;
-    } else {
-      pos += speed;
-    }
+    // Mueve solo si no se está arrastrando
+    if (!dragging) pos -= 1;
 
     if (pos <= -contentWidth) pos += contentWidth;
     if (pos > 0) pos -= contentWidth;
@@ -46,40 +45,49 @@ import { REVIEWS } from "../libs/reviews-constants.js";
   requestId = requestAnimationFrame(animate);
 
   function onStart(e) {
+    e.preventDefault();
     dragging = true;
+    moved = false;
     cancelAnimationFrame(requestId);
-    startX = e.type.includes("mouse") ? e.pageX : e.touches[0].pageX;
+
+    startX = e.pageX ?? e.clientX;
     lastX = startX;
 
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("touchmove", onMove);
-    window.addEventListener("mouseup", onEnd);
-    window.addEventListener("touchend", onEnd);
+    track.setPointerCapture(e.pointerId);
   }
 
   function onMove(e) {
     if (!dragging) return;
-    const x = e.type.includes("mouse") ? e.pageX : e.touches[0].pageX;
-    speed = x - lastX;
-    pos += speed;
+
+    const x = e.pageX ?? e.clientX;
+    const delta = x - lastX;
+
+    // Solo mueve si hay desplazamiento real
+    if (Math.abs(delta) > 0.5) {
+      moved = true;
+      pos += delta;
+      track.style.transform = `translateX(${pos}px)`;
+    }
+
+    speed = delta;
     lastX = x;
-    track.style.transform = `translateX(${pos}px)`;
   }
 
   function onEnd(e) {
+    if (!dragging) return;
     dragging = false;
+    track.releasePointerCapture(e.pointerId);
     speed = 0;
 
-    window.removeEventListener("mousemove", onMove);
-    window.removeEventListener("touchmove", onMove);
-    window.removeEventListener("mouseup", onEnd);
-    window.removeEventListener("touchend", onEnd);
-
+    // Si solo mantuvo presionado sin mover, no pasa nada raro
     requestId = requestAnimationFrame(animate);
   }
 
-  track.addEventListener("mousedown", onStart);
-  track.addEventListener("touchstart", onStart);
+  track.addEventListener("pointerdown", onStart);
+  track.addEventListener("pointermove", onMove);
+  track.addEventListener("pointerup", onEnd);
+  track.addEventListener("pointercancel", onEnd);
+  track.addEventListener("lostpointercapture", onEnd);
 
   window.addEventListener("resize", () => {
     slideWidth = slides[0].offsetWidth + 24;
