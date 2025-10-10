@@ -4,15 +4,17 @@ import Star from "./icons/Star.astro";
 ---
 
 <article
-  class="bg-white text-black flex flex-col justify-between p-6 rounded-xl shadow min-w-[280px] min-h-[216px] max-w-[320px] flex-shrink-0"
+  class="bg-white text-black flex flex-col justify-start p-6 rounded-xl shadow min-w-[320px] min-h-[260px] max-w-[320px] flex-shrink-0"
 >
-  <blockquote class="italic">"{review}"</blockquote>
-  <cite class="mt-4 font-semibold text-blue-800">- {name}</cite>
-  <div class="flex items-center mt-2">
-    {
-      Array.from({ length: stars }).map((_, index) => (
-        <Star class="text-yellow-500" />
-      ))
-    }
+  <div class="flex flex-col gap-1 mb-4">
+    <cite class="mt-4 font-semibold text-blue-800">- {name}</cite>
+    <div class="flex items-center mt-2">
+      {
+        Array.from({ length: stars }).map((_, index) => (
+          <Star class="text-yellow-500" />
+        ))
+      }
+    </div>
   </div>
+  <blockquote class="italic">"{review}"</blockquote>
 </article>

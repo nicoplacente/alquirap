@@ -1,5 +1,9 @@
+---
+const { className } = Astro.props;
+---
+
 <article
-  class="rounded-3xl bg-white/5 backdrop-blur-xl border min-h-[234px] border-white/10 shadow-lg p-8 hover:shadow-2xl transition-all duration-500"
+  class={`rounded-3xl bg-white/5 backdrop-blur-xl border min-h-[234px] border-white/10 size-full shadow-lg p-8 hover:shadow-2xl transition-all duration-500 ${className}`}
 >
   <slot />
 </article>

@@ -2,14 +2,29 @@
 import SectionContainer from "../components/SectionContainer.astro";
 import Title from "../components/Title.astro";
 import { tools } from "../libs/tools-constants.js";
+
+const ITEMS_PER_PAGE = 24;
+let currentPage = 1;
+const totalPages = Math.ceil(tools.length / ITEMS_PER_PAGE);
+
+function getPaginatedTools(page: any) {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  return tools.slice(start, end);
+}
 ---
 
-<section id="tools" class="bg-blue-100 py-16">
-  <Title> Nuestras Herramientas </Title>
-  <div class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
+<SectionContainer id="tools" className="w-full !px-0 bg-blue-100">
+  <Title>Nuestras Herramientas</Title>
+
+  <div
+    id="tools-container"
+    class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6"
+    data-tools={JSON.stringify(tools)}
+  >
     {
-      tools.map((tool) => (
-        <div class="bg-white flex flex-col justify-between p-4 rounded-xl shadow hover:shadow-lg transition group overflow-hidden">
+      getPaginatedTools(currentPage).map((tool) => (
+        <div class="bg-white flex flex-col justify-between space-y-1 p-4 rounded-xl shadow hover:shadow-lg transition group overflow-hidden">
           <img
             src={tool.image}
             alt={tool.name}
@@ -19,12 +34,91 @@ import { tools } from "../libs/tools-constants.js";
           <h3 class="mt-4 text-xl font-semibold text-blue-800 text-balance">
             {tool.name}
           </h3>
+          <span class="flex w-full justify-between text-pretty text-blue-800/70 text-sm">
+            <p>{tool.brand}</p>
+            <p>{tool.model}</p>
+          </span>
           <p class="text-gray-600 text-pretty">{tool.description}</p>
-          <p class="mt-2 font-bold text-blue-900">
-            ${tool.price.toLocaleString("es-AR")} / día
-          </p>
         </div>
       ))
     }
   </div>
-</section>
+
+  <div class="flex justify-center mt-8 space-x-2">
+    <button
+      id="prev-btn"
+      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      disabled={currentPage === 1}
+    >
+      Anterior
+    </button>
+
+    <span class="px-4 py-2 bg-gray-800 rounded">
+      Página <span id="current-page">{currentPage}</span> de {totalPages}
+    </span>
+
+    <button
+      id="next-btn"
+      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      disabled={currentPage === totalPages}
+    >
+      Siguiente
+    </button>
+  </div>
+</SectionContainer>
+
+<script is:inline>
+  const ITEMS_PER_PAGE = 24;
+  let currentPage = 1;
+
+  const container = document.getElementById("tools-container");
+  const currentPageEl = document.getElementById("current-page");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+
+  const clientTools = JSON.parse(container.dataset.tools);
+
+  const totalPages = Math.ceil(clientTools.length / ITEMS_PER_PAGE);
+
+  function renderTools(page) {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const paginated = clientTools.slice(start, end);
+
+    container.innerHTML = paginated
+      .map(
+        (tool) => `
+      <div class="bg-white flex flex-col justify-between p-4 rounded-xl shadow hover:shadow-lg transition group overflow-hidden">
+        <img src="${tool.image}" alt="${tool.name}" class="rounded-lg w-full h-48 object-scale-down group-hover:scale-110 transition-transform duration-300" title="${tool.name}" />
+        <h3 class="mt-4 text-xl font-semibold text-blue-800 text-balance">${tool.name}</h3>
+        <span class="flex w-full justify-between text-pretty text-blue-800/70 text-sm">
+          <p>${tool.brand}</p>
+          <p>${tool.model}</p>
+        </span>
+        <p class="text-gray-600 text-pretty">${tool.description}</p>
+      </div>
+    `
+      )
+      .join("");
+
+    currentPageEl.textContent = page;
+    prevBtn.disabled = page === 1;
+    nextBtn.disabled = page === totalPages;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderTools(currentPage);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderTools(currentPage);
+    }
+  });
+
+  renderTools(currentPage);
+</script>

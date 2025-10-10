@@ -5,6 +5,7 @@ import GlassCard from "../components/GlassCard.astro";
 import Dot from "../components/icons/Dot.astro";
 import SubTitle from "../components/SubTitle.astro";
 import Check from "../components/icons/Check.astro";
+import Warning from "../components/icons/Warning.astro";
 
 const rentalSteps = [
   { id: 1, text: "Alquiler por día" },
@@ -13,20 +14,31 @@ const rentalSteps = [
   { id: 4, text: "Por contrato" },
   { id: 5, text: "Maquinaria especializada disponible bajo reserva" },
 ];
+
+const requirements = [
+  {
+    id: 1,
+    text: "Presentar DNI y un SERVICIO (luz, gas, tel, etc) a su nombre.",
+  },
+  {
+    id: 2,
+    text: "Ser mayor de 18 años.",
+  },
+];
 ---
 
 <SectionContainer id="info">
   <div class="relative">
     <Title>Información</Title>
 
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="grid lg:grid-cols-3 gap-4 items-center">
       <GlassCard>
         <SubTitle>
           <Dot />
           Sobre el dueño
         </SubTitle>
         <p class="mt-4 text-gray-200 leading-relaxed">
-          <b>Alfredo J. Scialabba</b> fundó
+          <b>Alfredo J. Scialabba</b> creó
           <strong
             class="px-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded"
           >
@@ -34,7 +46,7 @@ const rentalSteps = [
           >
           con la misión de brindar acceso fácil y rápido a herramientas y maquinaria
           para profesionales y particulares. Con más de
-          <span class="font-semibold text-blue-300">10 años de experiencia</span
+          <span class="font-semibold text-blue-300">15 años de experiencia</span
           >
           en el rubro, se dedica a garantizar un servicio transparente y confiable.
         </p>
@@ -48,11 +60,30 @@ const rentalSteps = [
         <ul class="mt-4 space-y-3 flex flex-wrap text-gray-200">
           {
             rentalSteps.map((step) => (
-              <li class="flex min-w-[225px] max-w-full items-start gap-3">
+              <li class="flex min-w-[225px] max-w-full items-start gap-3 text-pretty">
                 <span>
                   <Check class="text-blue-400" />
                 </span>{" "}
                 {step.text}
+              </li>
+            ))
+          }
+        </ul>
+      </GlassCard>
+
+      <GlassCard>
+        <SubTitle>
+          <Dot />
+          Requisitos
+        </SubTitle>
+        <ul class="mt-4 space-y-3 flex flex-col text-gray-200">
+          {
+            requirements.map((req) => (
+              <li class="flex min-w-[225px] max-w-full items-start gap-3 text-pretty">
+                <span>
+                  <Warning class="text-yellow-400" />
+                </span>{" "}
+                {req.text}
               </li>
             ))
           }

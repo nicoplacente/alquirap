@@ -3,6 +3,9 @@ import SectionContainer from "../components/SectionContainer.astro";
 import Location from "../components/icons/Location.astro";
 import Phone from "../components/icons/Phone.astro";
 import Mail from "../components/icons/Mail.astro";
+import Clock from "../components/icons/Clock.astro";
+import Facebook from "../components/icons/Facebook.astro";
+import Instagram from "../components/icons/Instagram.astro";
 
 const contactInfo = [
   {
@@ -10,6 +13,12 @@ const contactInfo = [
     text: "alquirap@hotmail.com",
     href: "mailto:alquirap@hotmail.com",
     target: "_blank",
+    secondMail: {
+      icon: Mail,
+      text: "alquirap2011@gmail.com",
+      href: "mailto:alquirap2011@gmail.com",
+      target: "_blank",
+    },
   },
   {
     icon: Phone,
@@ -18,9 +27,21 @@ const contactInfo = [
     target: "_self",
   },
   {
+    icon: Instagram,
+    text: "@alfredo_scialabba_",
+    href: "https://www.instagram.com/alfredo_scialabba_?utm_source=qr&igsh=MWc3bndha2kyczhvZQ==",
+    target: "_blank",
+  },
+  {
+    icon: Facebook,
+    text: "AlquiRap SA",
+    href: "https://www.facebook.com/share/19fdgZFeWv/",
+    target: "_blank",
+  },
+  {
     icon: Location,
     text: "Av. Del Molino 1551 - Coronel Suárez",
-    href: "https://www.google.com/maps?ll=-37.461934,-61.938594&z=15&t=m&hl=es-419&gl=US&mapclient=embed&q=Av.+del+Molino+1551+B7540+Coronel+Suarez+Provincia+de+Buenos+Aires",
+    href: "https://www.google.com/maps/place/AlquiRap/@-37.4589996,-61.9228937,20z/data=!4m14!1m7!3m6!1s0x95eb73263cbf36f5:0xd012bb2be837b35a!2sAv.+del+Molino+1551,+B7540+Coronel+Suarez,+Provincia+de+Buenos+Aires,+Argentina!3b1!8m2!3d-37.461934!4d-61.9385939!3m5!1s0x95eb72d0d4c965c5:0x7456521ffa5b536!8m2!3d-37.4587882!4d-61.9225637!16s%2Fg%2F11c60cmcwp?hl=es-419&entry=ttu&g_ep=EgoyMDI1MTAwNi4wIKXMDSoASAFQAw%3D%3D",
     target: "_blank",
   },
 ];
@@ -32,22 +53,48 @@ const contactInfo = [
     <div class="flex flex-col gap-2">
       {
         contactInfo.map((item) => (
-          <a
-            href={item.href}
-            aria-label={item.text}
-            target={item.target}
-            rel="noopener noreferrer nofollow"
-            class="flex items-center gap-2 hover:underline"
-          >
-            <item.icon />
-            {item.text}
-          </a>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <a
+              href={item.href}
+              aria-label={item.text}
+              target={item.target}
+              rel="noopener noreferrer nofollow"
+              class="flex items-center gap-2 hover:underline"
+            >
+              <item.icon />
+              {item.text}
+            </a>
+
+            {item.secondMail && <span class="hidden sm:block">//</span>}
+            {item.secondMail && (
+              <a
+                href={item.secondMail.href}
+                aria-label={item.secondMail.text}
+                target={item.secondMail.target}
+                rel="noopener noreferrer nofollow"
+                class="flex items-center gap-2 hover:underline"
+              >
+                <span class="block sm:hidden">
+                  <item.secondMail.icon />
+                </span>
+                {item.secondMail.text}
+              </a>
+            )}
+          </div>
         ))
       }
+      <hr />
+      <p class="text-pretty">
+        <b class="flex items-center gap-1"><Clock />Horario de atención:</b
+        >Lunes a viernes de 8:00hs a 12:00hs y de 15:00hs a 19:00hs. <br /> Sábados
+        de 8:00hs a 12:00hs.
+      </p>
     </div>
     <iframe
       class="w-full h-64 rounded-lg shadow-lg"
-      src="https://maps.google.com/maps?q=Av.%20Del%20Molino%201551%20Coronel%20Su%C3%A1rez&t=&z=15&ie=UTF8&iwloc=&output=embed"
-    ></iframe>
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2621.892708775002!2d-61.9228937!3d-37.4589996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95eb72d0d4c965c5%3A0x7456521ffa5b536!2sAlquiRap!5e0!3m2!1ses-419!2sar!4v1728449987000!5m2!1ses-419!2sar"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 </SectionContainer>
