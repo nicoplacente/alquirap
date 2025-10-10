@@ -2,65 +2,71 @@
 import SectionContainer from "../components/SectionContainer.astro";
 import Title from "../components/Title.astro";
 import { tools } from "../libs/tools-constants.js";
-
-const ITEMS_PER_PAGE = 24;
-let currentPage = 1;
-const totalPages = Math.ceil(tools.length / ITEMS_PER_PAGE);
-
-function getPaginatedTools(page: any) {
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-  return tools.slice(start, end);
-}
 ---
 
 <SectionContainer id="tools" className="w-full !px-0 bg-blue-100">
   <Title>Nuestras Herramientas</Title>
 
   <div
+    class="flex flex-col lg:flex-row justify-center items-center gap-2 mb-8 text-sm"
+  >
+    <div class="px-4 w-full max-w-md relative">
+      <input
+        type="text"
+        id="tools-search"
+        placeholder="Buscar por nombre o marca..."
+        class="w-full text-black px-4 py-2 border border-blue-800 rounded focus:outline-none search-cancel"
+      />
+      <button
+        id="clear-search"
+        type="button"
+        class="absolute right-7 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 hidden cursor-pointer"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="flex justify-center space-x-2">
+      <button
+        class="prev-btn px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      >
+        Anterior
+      </button>
+
+      <span class="px-4 py-2 bg-blue-800 rounded">
+        Página <span class="current-page-number">1</span> de
+        <span class="total-pages-number">1</span>
+      </span>
+
+      <button
+        class="next-btn px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+
+  <div
     id="tools-container"
     class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6"
     data-tools={JSON.stringify(tools)}
   >
-    {
-      getPaginatedTools(currentPage).map((tool) => (
-        <div class="bg-white flex flex-col justify-between space-y-1 p-4 rounded-xl shadow hover:shadow-lg transition group overflow-hidden">
-          <img
-            src={tool.image}
-            alt={tool.name}
-            class="rounded-lg w-full h-48 object-scale-down group-hover:scale-110 transition-transform duration-300"
-            title={tool.name}
-          />
-          <h3 class="mt-4 text-xl font-semibold text-blue-800 text-balance">
-            {tool.name}
-          </h3>
-          <span class="flex w-full justify-between text-pretty text-blue-800/70 text-sm">
-            <p>{tool.brand}</p>
-            <p>{tool.model}</p>
-          </span>
-          <p class="text-gray-600 text-pretty">{tool.description}</p>
-        </div>
-      ))
-    }
   </div>
 
   <div class="flex justify-center mt-8 space-x-2">
     <button
-      id="prev-btn"
-      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
-      disabled={currentPage === 1}
+      class="prev-btn text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
     >
       Anterior
     </button>
 
-    <span class="px-4 py-2 bg-gray-800 rounded">
-      Página <span id="current-page">{currentPage}</span> de {totalPages}
+    <span class="px-4 py-2 text-sm sm:text-base bg-blue-800 rounded">
+      Página <span class="current-page-number">1</span> de
+      <span class="total-pages-number">1</span>
     </span>
 
     <button
-      id="next-btn"
-      class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
-      disabled={currentPage === totalPages}
+      class="next-btn text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
     >
       Siguiente
     </button>
@@ -68,22 +74,29 @@ function getPaginatedTools(page: any) {
 </SectionContainer>
 
 <script is:inline>
-  const ITEMS_PER_PAGE = 24;
+  let ITEMS_PER_PAGE = window.innerWidth <= 1024 ? 6 : 24;
   let currentPage = 1;
 
   const container = document.getElementById("tools-container");
-  const currentPageEl = document.getElementById("current-page");
-  const prevBtn = document.getElementById("prev-btn");
-  const nextBtn = document.getElementById("next-btn");
+  const prevBtns = document.querySelectorAll(".prev-btn");
+  const nextBtns = document.querySelectorAll(".next-btn");
+  const currentPageEls = document.querySelectorAll(".current-page-number");
+  const totalPagesEls = document.querySelectorAll(".total-pages-number");
+  const toolsSection = document.getElementById("tools");
 
   const clientTools = JSON.parse(container.dataset.tools);
+  let filteredTools = [...clientTools];
+  let totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE);
 
-  const totalPages = Math.ceil(clientTools.length / ITEMS_PER_PAGE);
+  const searchInput = document.getElementById("tools-search");
 
   function renderTools(page) {
+    const toolsToRender = searchInput.value.trim()
+      ? filteredTools
+      : clientTools;
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
-    const paginated = clientTools.slice(start, end);
+    const paginated = toolsToRender.slice(start, end);
 
     container.innerHTML = paginated
       .map(
@@ -96,29 +109,85 @@ function getPaginatedTools(page: any) {
           <p>${tool.model}</p>
         </span>
         <p class="text-gray-600 text-pretty">${tool.description}</p>
+        <a 
+          href="https://wa.me/5492926496732?text=${encodeURIComponent(`Hola! Quisiera consultar el precio de alquiler de "${tool.name}".`)}"
+          target="_blank"
+          class="mt-3 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-center"
+        >
+          Consultar precios
+        </a>
       </div>
     `
       )
       .join("");
 
-    currentPageEl.textContent = page;
-    prevBtn.disabled = page === 1;
-    nextBtn.disabled = page === totalPages;
+    totalPages = Math.ceil(toolsToRender.length / ITEMS_PER_PAGE);
+    currentPageEls.forEach((el) => (el.textContent = page));
+    totalPagesEls.forEach((el) => (el.textContent = totalPages));
+
+    prevBtns.forEach((btn) => (btn.disabled = page === 1));
+    nextBtns.forEach((btn) => (btn.disabled = page === totalPages));
   }
 
-  prevBtn.addEventListener("click", () => {
+  function goPrevPage() {
     if (currentPage > 1) {
       currentPage--;
       renderTools(currentPage);
+      toolsSection.scrollIntoView({ behavior: "smooth" });
     }
-  });
+  }
 
-  nextBtn.addEventListener("click", () => {
+  function goNextPage() {
     if (currentPage < totalPages) {
       currentPage++;
+      renderTools(currentPage);
+      toolsSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  prevBtns.forEach((btn) => btn.addEventListener("click", goPrevPage));
+  nextBtns.forEach((btn) => btn.addEventListener("click", goNextPage));
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim().toLowerCase();
+    filteredTools = clientTools.filter(
+      (tool) =>
+        tool.name.toLowerCase().includes(query) ||
+        tool.brand.toLowerCase().includes(query)
+    );
+
+    currentPage = 1;
+    renderTools(currentPage);
+  });
+
+  renderTools(currentPage);
+
+  window.addEventListener("resize", () => {
+    const newItems = window.innerWidth <= 1024 ? 6 : 24;
+    if (newItems !== ITEMS_PER_PAGE) {
+      ITEMS_PER_PAGE = newItems;
+      totalPages = Math.ceil(filteredTools.length / ITEMS_PER_PAGE);
+
+      if (currentPage > totalPages) currentPage = totalPages;
+
       renderTools(currentPage);
     }
   });
 
-  renderTools(currentPage);
+  const clearBtn = document.getElementById("clear-search");
+
+  searchInput.addEventListener("input", () => {
+    if (searchInput.value.trim() !== "") {
+      clearBtn.classList.remove("hidden");
+    } else {
+      clearBtn.classList.add("hidden");
+    }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    clearBtn.classList.add("hidden");
+    searchInput.dispatchEvent(new Event("input"));
+    searchInput.focus();
+  });
 </script>
