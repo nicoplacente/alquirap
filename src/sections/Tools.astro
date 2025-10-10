@@ -8,7 +8,7 @@ import { tools } from "../libs/tools-constants.js";
   <Title>Nuestras Herramientas</Title>
 
   <div
-    class="flex flex-col lg:flex-row justify-center items-center gap-2 mb-8 text-sm"
+    class="flex flex-col lg:flex-row justify-center items-center gap-4 sm:gap-2 mb-8 text-sm"
   >
     <div class="px-4 w-full max-w-md relative">
       <input
@@ -55,18 +55,20 @@ import { tools } from "../libs/tools-constants.js";
 
   <div class="flex justify-center mt-8 space-x-2">
     <button
-      class="prev-btn text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      class="prev-btn prev-btn-2 text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
     >
       Anterior
     </button>
 
-    <span class="px-4 py-2 text-sm sm:text-base bg-blue-800 rounded">
+    <span
+      class="current-page-container px-4 py-2 text-sm sm:text-base bg-blue-800 rounded"
+    >
       Página <span class="current-page-number">1</span> de
       <span class="total-pages-number">1</span>
     </span>
 
     <button
-      class="next-btn text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+      class="next-btn next-btn-2 text-sm sm:text-base px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
     >
       Siguiente
     </button>
@@ -82,6 +84,11 @@ import { tools } from "../libs/tools-constants.js";
   const nextBtns = document.querySelectorAll(".next-btn");
   const currentPageEls = document.querySelectorAll(".current-page-number");
   const totalPagesEls = document.querySelectorAll(".total-pages-number");
+  const currentPageContainer = document.querySelector(
+    ".current-page-container"
+  );
+  const prevBtns2 = document.querySelector(".prev-btn-2");
+  const nextBtns2 = document.querySelector(".next-btn-2");
   const toolsSection = document.getElementById("tools");
 
   const clientTools = JSON.parse(container.dataset.tools);
@@ -94,6 +101,7 @@ import { tools } from "../libs/tools-constants.js";
     const toolsToRender = searchInput.value.trim()
       ? filteredTools
       : clientTools;
+
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
     const paginated = toolsToRender.slice(start, end);
@@ -117,7 +125,7 @@ import { tools } from "../libs/tools-constants.js";
           Consultar precios
         </a>
       </div>
-    `
+      `
       )
       .join("");
 
@@ -127,6 +135,20 @@ import { tools } from "../libs/tools-constants.js";
 
     prevBtns.forEach((btn) => (btn.disabled = page === 1));
     nextBtns.forEach((btn) => (btn.disabled = page === totalPages));
+
+    if (toolsToRender.length === 0) {
+      prevBtns2.classList.add("hidden");
+      nextBtns2.classList.add("hidden");
+      currentPageContainer.classList.add("hidden");
+      container.classList.remove("grid");
+      container.innerHTML =
+        "<p class='text-center text-pretty mx-auto text-gray-800'>No se encontraron herramientas con ese nombre o marca.</p>";
+    } else {
+      nextBtns2.classList.remove("hidden");
+      prevBtns2.classList.remove("hidden");
+      currentPageContainer.classList.remove("hidden");
+      container.classList.add("grid");
+    }
   }
 
   function goPrevPage() {
