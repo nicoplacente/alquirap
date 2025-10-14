@@ -76,17 +76,34 @@ const requirements = [
           <Dot />
           Requisitos
         </SubTitle>
-        <ul class="mt-4 space-y-3 flex flex-col text-gray-200">
+        <ul class="my-4 space-y-3 flex flex-col text-gray-200">
           {
             requirements.map((req) => (
               <li class="flex min-w-[225px] max-w-full items-start gap-3 text-pretty">
                 <span>
-                  <Warning class="text-yellow-400" />
-                </span>{" "}
+                  <Warning
+                    class={`text-yellow-400 size-5 ${req.id === 1 ? "mt-1" : ""}`}
+                  />
+                </span>
                 {req.text}
               </li>
             ))
           }
+        </ul>
+        <SubTitle>
+          <Dot />
+          Para empresas
+        </SubTitle>
+        <ul class="mt-4 space-y-3 flex flex-col text-gray-200">
+          <li
+            class="flex min-w-[225px] max-w-full items-start gap-3 text-pretty"
+          >
+            <span>
+              <Warning class="text-yellow-400 size-5 mt-1" />
+            </span>
+            Constancia de inscripción en ARCA (2 servicios y personal autorizado
+            con DNI)
+          </li>
         </ul>
       </GlassCard>
     </div>
