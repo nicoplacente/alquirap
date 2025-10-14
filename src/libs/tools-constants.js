@@ -271,7 +271,7 @@ export const tools = [
     brand: "KIPOR",
     model: "KDE30SS3 (36 A.)",
   },
-  { image: "", name: "Grúa", brand: "Ferrari", model: "" },
+  { image: "", name: "Grúa x hora", brand: "Ferrari", model: "" },
   { image: "", name: "Minicargadora x hora", brand: "Lingking", model: "" },
   { image: "", name: "Hidrolavadora", brand: "Karcher", model: "HD 5/11C" },
   { image: "", name: "Hidrolavadora", brand: "Karcher", model: "HD 5/11P" },
