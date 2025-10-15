@@ -2,7 +2,7 @@
   id="home"
   class="text-white py-20 grid place-content-center h-96 text-center"
 >
-  <h1 class="text-5xl font-extrabold">Bienvenido a AlquiRap</h1>
+  <h1 class="text-3xl sm:text-5xl font-extrabold">Bienvenido a AlquiRap</h1>
   <p class="mt-4 text-lg text-white/80">
     Tu solución confiable para el alquiler de herramientas y maquinaria
   </p>
@@ -10,8 +10,14 @@
 
 <style>
   #home {
-    background: linear-gradient(#0009, #000), url("/banner-alquirap.webp");
-    background-size: cover;
+    background: linear-gradient(#0005, #000), url("/banner-alquirap.webp");
+    background-size: 100% 768px;
     background-position: center;
+  }
+
+  @media (max-width: 1280px) {
+    #home {
+      background-size: cover;
+    }
   }
 </style>
