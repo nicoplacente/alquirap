@@ -103,6 +103,10 @@ import Search from "../components/icons/Search.astro";
 
   const searchInput = document.getElementById("tools-search");
 
+  function normalizeText(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   function renderTools(page) {
     const toolsToRender = searchInput.value.trim()
       ? filteredTools
@@ -194,11 +198,11 @@ import Search from "../components/icons/Search.astro";
   nextBtns.forEach((btn) => btn.addEventListener("click", goNextPage));
 
   searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim().toLowerCase();
+    const query = normalizeText(searchInput.value.trim().toLowerCase());
     filteredTools = clientTools.filter(
       (tool) =>
-        tool.name.toLowerCase().includes(query) ||
-        tool.brand.toLowerCase().includes(query)
+        normalizeText(tool.name.toLowerCase()).includes(query) ||
+        normalizeText(tool.brand.toLowerCase()).includes(query)
     );
 
     currentPage = 1;
