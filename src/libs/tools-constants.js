@@ -940,13 +940,6 @@ export const tools = [
     description: "Radio portátil que permite la comunicación en tiempo real.",
   },
   {
-    image: "/herramientas/Herramientas.jpeg",
-    name: "Herramientas varias",
-    brand: "",
-    model: "",
-    description: "Juego de herramientas varias.",
-  },
-  {
     image: "/herramientas/Inversor de tensión 12vcc 220 CA  1000w Pronext.webp",
     name: "Inversor de tensión",
     brand: "Pronext",
@@ -967,5 +960,19 @@ export const tools = [
     brand: "Bosch",
     model: "DTECT 120",
     description: "Detector de caños plástico.",
+  },
+  {
+    image: "/herramientas/medidor-distancia-laser.jpeg",
+    name: "Medidor de distancia láser",
+    brand: "Wurth",
+    model: "WDM 60",
+    description: "Medidor de distancia láser hasta 60m.",
+  },
+  {
+    image: "/herramientas/Herramientas.jpeg",
+    name: "Herramientas varias",
+    brand: "",
+    model: "",
+    description: "Juego de herramientas varias.",
   },
 ];
